@@ -450,7 +450,7 @@ void draw() {
 
 		// Requirement #6:
 		//   Call drawCaution() to draw caution sign
-
+    drawCaution();
 		popMatrix();
 
 		// Depth UI
@@ -557,10 +557,12 @@ boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float 
 }
 
 String convertFramesToTimeString(int frames){	// Requirement #4
-  int seconds;
-  seconds = frames / 60;
-  
-	return "0"+seconds/60 + ":" + nf(seconds%60,2);
+  String result = "";
+  float totalSeconds = float(frames) / 60;
+  result += nf(floor(totalSeconds/60), 2);
+  result += ":";
+  result += nf(floor(totalSeconds%60), 2);
+  return result;
 }
 
 color getTimeTextColor(int frames){	
@@ -582,7 +584,12 @@ color getTimeTextColor(int frames){
 
 
 int getEnemyIndexByRow(int row){
-
+  for( int i=0 ; i<6 ; i++ ){
+    //println( soldierY[i] / SOIL_SIZE,row );
+    if( ( soldierY[i] / SOIL_SIZE ) == row ){
+      return i;
+    }
+  }     
   return -1;
     
 }
@@ -595,6 +602,11 @@ void drawCaution(){
 		// - Use playerRow to calculate the row below the screen
 		// - Use the returned value from int getEnemyIndexByRow(int row) to get the soldier's position from soldierX/soldierY arrays
 		// - Don't draw anything if int getEnemyIndexByRow(int row) returns -1
+  int a = getEnemyIndexByRow( playerRow+5 );
+    //println(a);
+    if( a != -1 ){
+      image( caution , soldierX[a] , soldierY[a]-SOIL_SIZE );
+    }
 }
 
 void keyPressed(){
